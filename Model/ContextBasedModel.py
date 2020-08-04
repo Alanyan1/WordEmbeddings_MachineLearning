@@ -2,7 +2,7 @@
 import random
 import json
 import numpy as np
-from Preprocessor import Processor
+from Model.Preprocessor import Processor
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from keras.models import Model
 from keras.layers import Dense, Input, Average

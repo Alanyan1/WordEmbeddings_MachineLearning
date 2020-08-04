@@ -1,5 +1,5 @@
-from ContextBasedModel import CBOW
-from Visual import Visualiser
+from Model.ContextBasedModel import CBOW
+from Model.Visual import Visualiser
 
 
 def run():
