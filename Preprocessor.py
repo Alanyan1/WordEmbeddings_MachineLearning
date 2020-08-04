@@ -1,4 +1,6 @@
-
+'''
+By Samuel Emilolorun
+'''
 
 class Processor:
     def __init__(self, datasetPath, numberOfComments):
@@ -20,6 +22,5 @@ class Processor:
 
 #Example Use
 # process = Processor("dataset.txt", 2)
-#
-# for element in process:
-#     print(element)
+# # for element in process:
+# #     print(element)

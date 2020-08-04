@@ -1,4 +1,6 @@
-
+"""
+By Samuel Emilolorun
+"""
 from googleapiclient.discovery import build
 import re
 import nltk
@@ -39,7 +41,6 @@ class DatasetGenerator:
         try:
             response = request.execute()
         except Exception as err:
-            print("EERRRRRR--------------------------------------------------------------------------------", err)
             return []
         for item in response["items"]:
             comments.append(item['snippet']['topLevelComment']['snippet']['textDisplay'])
@@ -51,7 +52,6 @@ class DatasetGenerator:
             for comment in comments:
                 comment = self.clean(comment)
                 if comment:
-                    print(comment)
                     file.write(comment + "\n")
 
     def clean(self, comment):
