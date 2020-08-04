@@ -6,6 +6,7 @@ from Preprocessor import Processor
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from keras.models import Model
 from keras.layers import Dense, Input, Average
+from keras.models import load_model
 
 '''By Samuel Emilolorun'''
 '''
@@ -18,6 +19,8 @@ class CBOW:
         self.vectorSize = vectorSize
         self.epochs = epochs
         self.maxSentenceSize = maxSentenceSize
+        self.vectors = []
+        self.words = []
         self.maxContextSize = 3
         random.seed(0)
 
@@ -34,7 +37,18 @@ class CBOW:
         x3 = np.array(self.input3)
         y = np.array(self.targets)
         classifier.fit([x1, x2, x3], y, batch_size=1000, epochs=self.epochs)
+        classifier.save("CBOW")
 
+    def load(self):
+        """
+        Loads a trained model and uses it to find a vector representation for every word used to train the model
+        This ultimately populates the vectors and words attributes.
+        """
+        classifier = load_model("CBOW")
+        outputLayer = classifier.get_layer("Embedding")
+        self.wordVectors = np.transpose(outputLayer.get_weights()[0])
+        self.__loadWordToPosition("WordPositions")
+        self.__populateVectorNames()
     def __buildVocab(self):
         unquieWord = set()
         for comment in self.processor:
@@ -77,9 +91,6 @@ class CBOW:
         self.input3.append(self.vocab_oneHotEncoded[self.wordToPosition[contexts[2]]])
         self.targets.append(self.vocab_oneHotEncoded[self.wordToPosition[target]])
 
-    def __saveWordToPosition(self):
-        with open("WordPositions", 'w') as file:
-            json.dump(self.wordToPosition, file)
 
     def __buildNeuralNet(self):
         input_dim = len(self.vocab)
@@ -99,7 +110,23 @@ class CBOW:
         classifier.compile(optimizer="adam", loss="binary_crossentropy")
         return classifier
 
+    def __populateVectorNames(self):
+        for word in self.wordToPosition:
+            self.vectors.append(self.wordVectors[self.wordToPosition[word]])
+            self.words.append(word)
+        print("VECTORS:   ", len(self.vectors))
+        print("WORDS: ", len(self.words))
 
+
+
+    def __saveWordToPosition(self):
+        with open("WordPositions", 'w') as file:
+            json.dump(self.wordToPosition, file)
+
+    def __loadWordToPosition(self, vocabPath):
+        with open(vocabPath, 'r') as file:
+           self.wordToPosition = json.load(file)
 cbow = CBOW("dataset.txt", 10)
 
-cbow.buildVocab()
+#cbow.train()
+cbow.load()
