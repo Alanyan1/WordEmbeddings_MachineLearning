@@ -114,6 +114,7 @@ class CBOW:
         for word in self.wordToPosition:
             self.vectors.append(self.wordVectors[self.wordToPosition[word]])
             self.words.append(word)
+        self.numpyLizeKeyLists()
         print("VECTORS:   ", len(self.vectors))
         print("WORDS: ", len(self.words))
 
@@ -126,7 +127,8 @@ class CBOW:
     def __loadWordToPosition(self, vocabPath):
         with open(vocabPath, 'r') as file:
            self.wordToPosition = json.load(file)
-cbow = CBOW("dataset.txt", 10)
 
-#cbow.train()
-cbow.load()
+
+    def numpyLizeKeyLists(self):
+        self.vectors = np.array(self.vectors)
+        self.words = np.array(self.words)

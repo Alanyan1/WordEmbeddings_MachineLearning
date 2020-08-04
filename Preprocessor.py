@@ -18,9 +18,3 @@ class Processor:
                 currentCommentList = currentComment.replace("\n", "").split(",")
                 yield currentCommentList
 
-
-
-#Example Use
-# process = Processor("dataset.txt", 2)
-# # for element in process:
-# #     print(element)
